@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<body style="text-align: center; background-color:powderblue;">
+    <div>
+        <label> FirstName </label> <br><br>
+        <input type="text" id="FirstName" name="ER" value="" /><br>
+        <label> LastName </label> <br><br>
+        <input type="text" id="LastName" name="ER" value="" /><br>
+        <label> Rollno </label> <br><br>
+        <input type="number" id="Rollno" name="ER" value="" /><br>
+        <label> Dateofbirth </label> <br><br>
+        <input type="Date" id="Dateofbirth" name="ER" oninput="ageCalculator()" value="" /><br><br><br>
+        <input type="text" id="Age" name="ER"> <br><br>
+        <label> Address </label> <br><br>
+        <input type="text" id="Address" name="ER" value="" /><br><br>
+        <button type="button" id="button" onclick="Sheet()">
+            Submit
+        </button>
+    </div>
+
+
+    <table id="student" width="100%" cellspacing="0">
+
+    </table>
+
+
+    <script type="text/javascript">
+
+        function ageCalculator() {
+            var userinput = document.getElementById("Dateofbirth").value;
+            var dob = new Date(userinput);
+            var dobYear = dob.getYear();
+            var dobMonth = dob.getMonth();
+            var dobDate = dob.getDate();
+
+
+            var now = new Date();
+
+            var currentYear = now.getYear();
+            var currentMonth = now.getMonth();
+            var currentDate = now.getDate();
+
+            yearAge = currentYear - dobYear;
+
+
+            if (currentMonth >= dobMonth)
+
+                var monthAge = currentMonth - dobMonth;
+            else {
+                yearAge--;
+                var monthAge = 12 + currentMonth - dobMonth;
+            }
+
+
+            if (currentDate >= dobDate)
+
+                var dateAge = currentDate - dobDate;
+            else {
+                monthAge--;
+                var dateAge = 31 + currentDate - dobDate;
+
+                if (monthAge < 0) {
+                    monthAge = 11;
+                    yearAge--;
+                }
+            }
+            if (yearAge < 10) {
+                document.getElementById("Age").value = yearAge + " years " + monthAge + " months " + dateAge + " days"
+                age = yearAge + " years " + monthAge + " months " + dateAge + " days";
+            }
+            else {
+                document.getElementById("Age").value = yearAge + " years "
+                age = yearAge + " years ";
+            }
+
+        }
+        var array = [];
+        function onEdit(index) {
+
+
+            document.getElementById("FirstName").value = array[index][0];
+            document.getElementById("LastName").value = array[index][1];
+            document.getElementById("Rollno").value = array[index][2];
+            document.getElementById("Dateofbirth").value = array[index][3];
+            document.getElementById("Address").value = array[index][4];
+            document.getElementById("Age").value = array[index][5];
+        }
+        function onDelete(index) {
+            if (confirm('Are you sure you want to delete this from table?')) {
+                var tbl = document.getElementById('student');
+                let d = ++index;
+                tbl.deleteRow(d)
+                array.pop(index, 1);
+
+            } else {
+
+
+            }
+
+            tbl.innerHTML = " <tr><th>FirstName</th> <th>LastName</th><th>Rollno</th> <th>Dateofbirth</th>  <th>Address</th> <th>Age</th><th>Action</th> </tr>";
+            for (var i = 0; i < array.length; i++) {
+                var r = tbl.insertRow();
+                for (var c = 0; c < array[i].length; c++) {
+                    var cell = r.insertCell();
+
+                    cell.innerHTML = array[i][c];
+                    if (c == array[i].length - 1) {
+                        var cellEdit = r.insertCell();
+                        var btn = document.createElement("BUTTON");
+                        btn.innerHTML = "Edit"
+                        var btn1 = document.createElement("BUTTON");
+                        btn1.innerHTML = "Delete"
+                        cellEdit.appendChild(btn);
+                        btn.setAttribute("tag", i);
+                        btn.addEventListener("click", function (e) {
+                            onEdit(e.currentTarget.getAttribute("tag"));
+                        });
+                        cellEdit.appendChild(btn1);
+                        btn1.setAttribute("tag", i);
+                        btn1.addEventListener("click", function (e) {
+                            onDelete(e.currentTarget.getAttribute("tag"));
+                        });
+
+                    }
+
+                }
+            }
+
+        }
+        function validateForm() {
+
+            var b = document.getElementsByName('ER');
+
+            for (i = 0; i < b.length; i++) {
+
+                if (b[i].value == "") {
+
+                    return false;
+                }
+
+            }
+
+            return true;
+
+        }
+
+        var tbl = document.getElementById('student');
+        var cell;
+        function Sheet() {
+
+
+            if (validateForm()) {
+                var fname = document.getElementById('FirstName').value;
+                var lname = document.getElementById('LastName').value;
+                var rollno = document.getElementById('Rollno').value;
+                var dob = document.getElementById('Dateofbirth').value;
+                var addr = document.getElementById('Address').value;
+
+                array.push([fname, lname, rollno, dob, addr, age]);
+
+
+
+                console.log(array);
+
+                tbl.innerHTML = " <tr><th>FirstName</th> <th>LastName</th><th>Rollno</th><th>Dateofbirth</th>  <th>Address</th> <th>Age</th> <th>Action</th> </tr>";
+                for (var i = 0; i < array.length; i++) {
+                    var r = tbl.insertRow();
+                    for (var c = 0; c < array[i].length; c++) {
+                        var cell = r.insertCell();
+
+                        cell.innerHTML = array[i][c];
+                        if (c == array[i].length - 1) {
+                            var cellEdit = r.insertCell();
+                            var btn = document.createElement("BUTTON");
+                            btn.innerHTML = "Edit"
+                            var btn1 = document.createElement("BUTTON");
+                            btn1.innerHTML = "Delete"
+                            cellEdit.appendChild(btn);
+                            btn.setAttribute("tag", i);
+                            btn.addEventListener("click", function (e) {
+                                onEdit(e.currentTarget.getAttribute("tag"));
+                            });
+                            cellEdit.appendChild(btn1);
+                            btn1.setAttribute("tag", i);
+                            btn1.addEventListener("click", function (e) {
+                                onDelete(e.currentTarget.getAttribute("tag"));
+                            });
+
+                        }
+
+                    }
+                }
+                var b = document.getElementsByName('ER');
+                for (var j = 0; j < b.length; j++) {
+                    b[j].value = "";
+                }
+            }
+            else {
+                alert("please enter the values");
+            }
+
+        }
+    </script>
+</body>
+
+</html>
